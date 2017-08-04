@@ -117,14 +117,17 @@
         </script>
         <script type="text/javascript">
             $(document).ready(function() {
-                var _ajaxCall = $.ajax({
+                var _addScriptTag = document.createElement('script');
+                _addScriptTag.setAttribute('src', kruxTntUrl);
+                document.body.appendChild(_addScriptTag);
+                /*var _ajaxCall = $.ajax({
                     method: "GET",
                     crossDomain: true,
                     url: kruxTntUrl,
                     dataType: 'jsonp'
                 }).done(function() {
                     console.log('Success');
-                });
+                });*/
             });
         </script>
 
