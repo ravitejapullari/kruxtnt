@@ -30,8 +30,8 @@
                 b10 = "",
                 _adBanner = {},
                 kruxSegment = 'rz5311ppp',
-                kruxTntUrl = "kruxSegment=rz5311ppp",
-                kruxTntUrlAr = ['rz5311ppp', 'rz5311xxx', 'rz5311yyy'];
+                kruxTntUrl = "kruxSegment=rz5311xxx",
+                kruxTntUrlAr = ['rz5311ppp']; //, 'rz5311xxx', 'rz5311yyy'];
             if (typeof(Storage) != undefined) {
                 //  localStorage.removeItem('kxbarclays_bank_allsegs');
                 // localStorage.removeItem('kxbarclays_bank_segs');
@@ -137,7 +137,7 @@
             https%3A%2F%2Fravitejapullari.github.io%2Fkruxtnt%2F -->
         <script type="text/javascript">
             $(document).ready(function() {
-                //mboxCreate(kruxTntUrl);
+                mboxCreate(kruxTntUrl);
                 for (var i = 0, j = kruxTntUrlAr.length; i < j; i++) {
                     mboxCreate('kruxSegment=' + kruxTntUrlAr[i]);
                 }
