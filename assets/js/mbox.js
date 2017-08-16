@@ -1,1 +1,982 @@
-var mboxCopyright = "Copyright 1996-2015. Adobe Systems Incorporated. All rights reserved.";var TNT = TNT || {};TNT.a = (function() { return { nestedMboxes: [], b: { companyName: "Test&amp;Target", isProduction: true, adminUrl: "http://admin7.testandtarget.omniture.com/admin", clientCode: "barclaysbankplc", serverHost: "barclaysbankplc.tt.omtrdc.net", mboxTimeout: 0, mboxLoadedTimeout: 100, mboxFactoryDisabledTimeout: 30 * 60, bodyPollingTimeout: 16, bodyHidingEnabled: false, bodyHiddenStyle: "body{opacity:0}", sessionExpirationTimeout: 31 * 60, experienceManagerDisabledTimeout: 30 * 60, experienceManagerTimeout: 5000, visitorApiTimeout: 500, visitorApiPageDisplayTimeout: 500, overrideMboxEdgeServer: false, overrideMboxEdgeServerTimeout: 31 * 60, tntIdLifetime: 5184000, crossDomain: "enabled", trafficDuration: 10368000, trafficLevelPercentage: 100, clientSessionIdSupport: false, clientTntIdSupport: false, passPageParameters: true, usePersistentCookies: true, crossDomainEnabled: true, crossDomainXOnly: false, imsOrgId: "14CF22CE52782FEA0A490D4D@AdobeOrg", globalMboxName: "Global_Mbox", globalMboxLocationDomId: "", globalMboxAutoCreate: true, experienceManagerPluginUrl: "//cdn.tt.omtrdc.net/cdn/target.js", siteCatalystPluginName: "tt", mboxVersion: 63, optoutEnabled: false, secureOnly: false, mboxIsSupportedFunction: function() { return true; }, parametersFunction: function() { return ""; }, cookieDomainFunction: function() { return mboxCookiePageDomain(); } }, c: { d: "mboxPage", e: "mboxMCGVID", f: "mboxMCGLH", g: "mboxAAMB", h: "mboxMCAVID", i: "mboxMCSDID", j: "mboxCount", k: "mboxHost", l: "mboxFactoryId", m: "mboxPC", n: "screenHeight", o: "screenWidth", p: "browserWidth", q: "browserHeight", r: "browserTimeOffset", s: "colorDepth", t: "mboxXDomain", u: "mboxURL", v: "mboxReferrer", w: "mboxVersion", x: "mbox", y: "mboxId", z: "mboxDOMLoaded", A: "mboxTime", B: "scPluginVersion" }, C: { D: "mboxDisable", E: "mboxSession", F: "mboxEnv", G: "mboxDebug" }, H: { D: "disable", E: "session", m: "PC", I: "level", J: "check", G: "debug", K: "em-disabled", L: "mboxEdgeServer" }, M: { N: "default", O: "mbox", P: "mboxImported-", Q: 60000, R: "mboxDefault", S: "mboxMarker-", T: 250, B: 1, U: "mboxedge", V: "tt.omtrdc.net" } }}());TNT.a.W = {};(function(X) { var Y = {}.toString; function Z(_) { return _ === void(0); } function ab(_) { return _ === null; } function bb(_) { if (Z(_) || ab(_)) { return true; } return _.length === 0; } function cb(_) { return Y.call(_) === '[object Function]'; } function db(_) { return Y.call(_) === '[object Array]'; } function eb(_) { return Y.call(_) === '[object String]'; } function fb(_) { return Y.call(_) === '[object Object]'; } function gb(hb, ib) { var jb = hb.length, kb = -1; while (++kb < jb) { ib(hb[kb]); } } X.Z = Z; X.ab = ab; X.bb = bb; X.cb = cb; X.db = db; X.eb = eb; X.fb = fb; X.gb = gb;}(TNT.a.W));mboxUrlBuilder = function(lb, mb) { this.lb = lb; this.mb = mb; this.nb = []; this.ob = function(u) { return u; }; this.pb = null;};mboxUrlBuilder.prototype = { constructor: mboxUrlBuilder, addNewParameter: function (qb, _) { this.nb.push({name: qb, value: _}); return this; }, addParameterIfAbsent: function (qb, _) { if (!_) { return; } for (var rb = 0; rb < this.nb.length; rb++) { var sb = this.nb[rb]; if (sb.name === qb) { return this; } } this.checkInvalidCharacters(qb); return this.addNewParameter(qb, _); }, addParameter: function(qb, _) { this.checkInvalidCharacters(qb); for (var rb = 0; rb < this.nb.length; rb++) { var sb = this.nb[rb]; if (sb.name === qb) { sb.value = _; return this; } } return this.addNewParameter(qb, _); }, addParameters: function(nb) { if (!nb) { return this; } for (var rb = 0; rb < nb.length; rb++) { var tb = nb[rb]; var ub = tb.indexOf('='); if (ub === -1 || ub === 0) { continue; } this.addParameter(tb.substring(0, ub), tb.substring(ub + 1, tb.length)); } return this; }, setServerType: function(vb) { this.wb = vb; }, setBasePath: function(pb) { this.pb = pb; }, setUrlProcessAction: function(xb) { this.ob = xb; }, buildUrl: function() { var yb = TNT.a.b.secureOnly, zb = yb ? 'https:' : '', Ab = TNT.a.Bb(this.lb), Cb = this.pb ? this.pb : '/m2/' + this.mb + '/mbox/' + this.wb, u = zb + '//' + Ab + Cb, Db = []; for (var rb = 0; rb < this.nb.length; rb++) { var sb = this.nb[rb]; Db.push(encodeURIComponent(sb.name) + '=' + encodeURIComponent(sb.value)); } u += u.indexOf('?') != -1 ? '&' + Db.join('&') : '?' + Db.join('&'); return this.Eb(this.ob(u)); }, getParameters: function() { return this.nb; }, setParameters: function(nb) { this.nb = nb; }, clone: function() { var Fb = new mboxUrlBuilder(this.lb, this.mb); Fb.setServerType(this.wb); Fb.setBasePath(this.pb); Fb.setUrlProcessAction(this.ob); for (var rb = 0; rb < this.nb.length; rb++) { Fb.addParameter(this.nb[rb].name, this.nb[rb].value); } return Fb; }, Eb: function(Gb) { return Gb.replace(/\"/g, '&quot;').replace(/>/g, '&gt;'); }, checkInvalidCharacters: function (qb) { var Hb = new RegExp('(\'|")'); if (Hb.exec(qb)) { throw "Parameter '" + qb + "' contains invalid characters"; } }};TNT.a.Ib = function() { var Jb = [], Kb = 0, Lb = []; function Mb(Nb, Ob) { Kb += 1; Jb[Nb] = Ob; Pb(); } function Pb() { var jb = Lb.length, kb = -1, Qb; if (Kb !== Jb.length || !Lb.length) { return; } while (++kb < jb) { Qb = Lb[kb]; Qb.fn.apply(Qb.ctx, Jb); } } return { Rb: function () { var Nb = Jb.length; Jb[Jb.length] = null; return function () { Mb(Nb, [].slice.call(arguments)); }; }, Sb: function (cb, context) { Lb.push({fn: cb, ctx: context}); Pb(); } };};(function(X, W, c, b, Tb) { var Ub = new RegExp("\\|MCMID\\|"), Vb = 'vst.', Wb = Vb + 'trk', Xb = Vb + 'trks'; function Yb(Zb, _) { return encodeURIComponent(Zb) + '=' + encodeURIComponent(_); } function _b(ac) { var bc, cc = function(Zb) { return Vb + Zb; }; if (!W.cb(ac.getCustomerIDs)) { return []; } bc = ac.getCustomerIDs(); if (!W.fb(bc)) { return []; } return X.dc(bc, [], cc); } function ec(ac, fc) { var gc = ac.trackingServer, hc = ac.trackingServerSecure; if (gc) { fc.push(Yb(Wb, gc)); } if (hc) { fc.push(Yb(Xb, hc)); } } function ic(ac, fc) { fc.push.apply(fc, _b(ac)); } function jc(Ob) { var fc = []; W.gb(Ob, function(hb) { fc.push(hb[0]); }); return fc; } function kc(lc) { return !W.bb(lc.value); } function mc(Ib, ac, nc, Zb) { var oc; if (!W.cb(ac[nc])) { return; } oc = Ib.Rb(); ac[nc](function(_) { oc({key:Zb, value: _}); }, true); } function pc(Ib, ac, qc) { qc(Ib, ac, 'getMarketingCloudVisitorID', c.e); qc(Ib, ac, 'getAudienceManagerBlob', c.g); qc(Ib, ac, 'getAnalyticsVisitorID', c.h); qc(Ib, ac, 'getAudienceManagerLocationHint', c.f); } function rc(Ib, ac, sc, tc, uc) { if (tc) { window.clearTimeout(sc.id); uc({optout: tc, params: []}); vc(); return; } pc(Ib, ac, mc); Ib.Sb(function() { if (sc.done) { return; } var c = jc([].slice.call(arguments)), fc = []; window.clearTimeout(sc.id); W.gb(c, function(lc) { if (kc(lc)) { fc.push(Yb(lc.key, lc.value)); } }); ic(ac, fc); ec(ac, fc); uc({optout: tc, params: fc}); vc(); }); } function wc(xc) { var ac; if (W.bb(xc) || W.Z(window.Visitor) || !W.cb(window.Visitor.getInstance)) { return null; } ac = window.Visitor.getInstance(xc); if (W.Z(ac) || W.ab(ac) || !ac.isAllowed()) { return null; } return ac; } function yc() { return !W.ab(wc(b.imsOrgId)); } function zc() { var ac = wc(b.imsOrgId); if (W.ab(ac)) { return false; } if (W.Z(ac.cookieName)) { return false; } if (!W.cb(ac.cookieRead)) { return false; } var Ac = ac.cookieRead(ac.cookieName); if (W.bb(Ac)) { return false; } return Ub.test(Ac); } function Bc(ac, Cc) { return Cc && W.cb(ac.isOptedOut) && !W.Z(window.Visitor.OptOut); } function Dc(Cc, uc) { var xc = b.imsOrgId, Ec = b.visitorApiTimeout, Ib = Tb(), sc = {id: NaN, done: false}, ac; ac = wc(xc); if (W.ab(ac)) { uc(null); return; } Fc(); sc.id = window.setTimeout(function() { sc.done = true; uc(null); vc(); }, Ec); if (Bc(ac, Cc)) { ac.isOptedOut(function(tc) { rc(Ib, ac, sc, tc, uc); }, window.Visitor.OptOut.GLOBAL, true); } else { rc(Ib, ac, sc, false, uc); } } function Gc(ac, nc, Zb, Hc) { if (ac[nc]) { var _ = ac[nc](); if (_) { Hc.push(Yb(Zb, _)); } } } function Ic() { var ac = wc(b.imsOrgId), fc = []; Gc(ac, 'getMarketingCloudVisitorID', c.e, fc); Gc(ac, 'getAudienceManagerBlob', c.g, fc); Gc(ac, 'getAnalyticsVisitorID', c.h, fc); Gc(ac, 'getAudienceManagerLocationHint', c.f, fc); ic(ac, fc); ec(ac, fc); return fc; } function Jc(x) { var xc = b.imsOrgId, mb = b.clientCode, ac = wc(xc); if (W.ab(ac) || !W.cb(ac.getSupplementalDataID)) { return ''; } return ac.getSupplementalDataID('mbox:' + mb + ':' + x); } function Fc() { if (!b.bodyHidingEnabled) { return; } if (!b.globalMboxAutoCreate) { return } var Kc = document.getElementsByTagName('head')[0]; var Lc = document.createElement('style'); Lc.type = 'text/css'; Lc.id = 'at-id-body-style'; if (Lc.styleSheet){ Lc.styleSheet.cssText = css; } else { Lc.appendChild(document.createTextNode(b.bodyHiddenStyle)); } if (Kc) { Kc.appendChild(Lc); } } function vc() { if (!b.bodyHidingEnabled) { return; } if (!b.globalMboxAutoCreate) { return } window.setTimeout(function() { var Kc = document.getElementsByTagName('head')[0]; var Lc = document.getElementById('at-id-body-style'); if (Kc && Lc) { Kc.removeChild(Lc); } }, b.visitorApiPageDisplayTimeout); } X.yc = yc; X.zc = zc; X.Dc = Dc; X.Ic = Ic; X.Jc = Jc;}(TNT.a, TNT.a.W, TNT.a.c, TNT.a.b, TNT.a.Ib));mboxStandardFetcher = function() { };mboxStandardFetcher.prototype = { constructor: mboxStandardFetcher, getType: function() { return 'standard'; }, fetch: function(Mc) { Mc.setServerType(this.getType()); document.write('<' + 'scr' + 'ipt src="' + Mc.buildUrl() + '"><' + '\/scr' + 'ipt>'); }, cancel: function() { }};mboxAjaxFetcher = function() { };mboxAjaxFetcher.prototype = { constructor: mboxAjaxFetcher, getType: function() { return 'ajax'; }, fetch: function(Mc) { Mc.setServerType(this.getType()); var Kc = document.getElementsByTagName('head')[0], Nc = document.createElement('script'); Nc.src = Mc.buildUrl(); Kc.appendChild(Nc); }, cancel: function() {}};(function(X){ function Oc() {} Oc.prototype = { constructor: Oc, getType: function() { return 'ajax'; }, fetch: function(Mc) { Mc.setServerType(this.getType()); document.write('<' + 'scr' + 'ipt src="' + Mc.buildUrl() +'"><' + '\/scr' + 'ipt>'); }, cancel: function() { } }; X.Oc = Oc;}(TNT.a));mboxMap = function() { this.Pc = {}; this.Qc = [];};mboxMap.prototype = { constructor: mboxMap, put: function(Zb, _) { if (!this.Pc[Zb]) { this.Qc[this.Qc.length] = Zb; } this.Pc[Zb] = _; }, get: function(Zb) { return this.Pc[Zb]; }, remove: function(Zb) { var Rc = []; this.Pc[Zb] = undefined; for (var i = 0; i < this.Qc.length; i++) { if (this.Qc[i] !== Zb) { Rc.push(this.Qc[i]); } } this.Qc = Rc; }, each: function(xb) { for (var rb = 0; rb < this.Qc.length; rb++ ) { var Zb = this.Qc[rb]; var _ = this.Pc[Zb]; if (_) { var fc = xb(Zb, _); if (fc === false) { break; } } } }, isEmpty: function() { return this.Qc.length === 0; }};mboxList = function() { this.Sc = [];};mboxList.prototype = { constructor: mboxList, add: function(Tc) { if (!Tc) { return; } this.Sc.push(Tc); }, get: function(x) { var fc = new mboxList(); for (var rb = 0; rb < this.Sc.length; rb++) { var Tc = this.Sc[rb]; if (Tc.getName() === x) { fc.add(Tc); } } return fc; }, getById: function(Nb) { return this.Sc[Nb]; }, length: function() { return this.Sc.length; }, each: function(xb) { var W = TNT.a.W; if (!W.cb(xb)) { throw 'Action must be a function, was: ' + typeof(xb); } for (var rb = 0; rb < this.Sc.length; rb++) { xb(this.Sc[rb]); } }};mboxSignaler = function(Uc) { this.Uc = Uc;};mboxSignaler.prototype = { constructor: mboxSignaler, signal: function(Vc, x ) { if (!this.Uc.isEnabled()) { return; } var Wc = mboxSignaler.Xc(), Yc = this.Zc(this.Uc._c(x)); Wc.appendChild(Yc); var Ob = [].slice.call(arguments, 1), Tc = this.Uc.create(x, Ob, Yc), Mc = Tc.getUrlBuilder(); Mc.addParameter(TNT.a.c.d, mboxGenerateId()); Tc.setFetcher(new mboxAjaxFetcher()); Tc.load(); }, Zc: function(ad) { var fc = document.createElement('div'); fc.id = ad; fc.style.visibility = 'hidden'; fc.style.display = 'none'; return fc; }};mboxSignaler.Xc = function() { return document.body;};mboxLocatorDefault = function(bd) { this.bd = bd; document.write('<div id="' + this.bd + '" style="visibility:hidden;display:none">&nbsp;<\/div>');};mboxLocatorDefault.prototype = { constructor: mboxLocatorDefault, locate: function() { var cd = 1, dd = document.getElementById(this.bd); while (dd) { if (dd.nodeType === cd && dd.className && dd.className.indexOf('mboxDefault') !== -1) { return dd; } dd = dd.previousSibling; } return null; }, force: function() { var ed = document.getElementById(this.bd), fd = document.createElement('div'); fd.className = 'mboxDefault'; if (ed) { ed.parentNode.insertBefore(fd, ed); } return fd; }};mboxLocatorNode = function(dd) { this.dd = dd;};mboxLocatorNode.prototype = { constructor: mboxLocatorNode, locate: function() { return typeof(this.dd) === 'string' ? document.getElementById(this.dd) : this.dd; }, force: function() { return null; }};mboxOfferContent = function() { this.gd = function() {};};mboxOfferContent.prototype = { constructor: mboxOfferContent, show: function (Tc) { var fc = Tc.showContent(document.getElementById(Tc.getImportName())); if (fc === 1) { this.gd(); } return fc; }, setOnLoad: function(gd) { this.gd = gd; }};mboxOfferAjax = function(hd) { this.hd = hd; this.gd = function() {};};mboxOfferAjax.prototype = { constructor: mboxOfferAjax, setOnLoad: function(gd) { this.gd = gd; }, show: function(Tc) { var id = document.createElement('div'), fc; id.id = Tc.getImportName(); id.innerHTML = this.hd; fc = Tc.showContent(id); if (fc === 1) { this.gd(); } return fc; }};mboxOfferDefault = function() { this.gd = function() {};};mboxOfferDefault.prototype = { constructor: mboxOfferDefault, show: function(Tc) { var fc = Tc.hide(); if (fc === 1) { this.gd(); } return fc; }, setOnLoad: function(gd) { this.gd = gd; }};mboxCookieManager = function(qb, jd) { this.qb = qb; this.kd = TNT.a.H.J; this.ld = TNT.a.b.crossDomainXOnly; this.md = TNT.a.H.D; this.nd = TNT.a.b.usePersistentCookies; this.od = new mboxMap(); this.jd = jd === '' || jd.indexOf('.') === -1 ? '' : '; domain=' + jd; this.loadCookies();};mboxCookieManager.prototype = { constructor: mboxCookieManager, isEnabled: function() { this.setCookie(this.kd, 'true', 60); this.loadCookies(); return this.getCookie(this.kd) == 'true'; }, setCookie: function(qb, _, pd) { if (typeof qb == 'undefined' || typeof _ == 'undefined' || typeof pd == 'undefined') { return; } var qd = Math.ceil(pd + new Date().getTime() / 1000), rd = mboxCookieManager.sd(qb, encodeURIComponent(_), qd); this.od.put(qb, rd); this.saveCookies(); }, getCookie: function(qb) { var rd = this.od.get(qb); return rd ? decodeURIComponent(rd.value) : null; }, deleteCookie: function(qb) { this.od.remove(qb); this.saveCookies(); }, getCookieNames: function(td) { var ud = []; this.od.each(function(qb, rd) { if (qb.indexOf(td) === 0) { ud[ud.length] = qb; } }); return ud; }, saveCookies: function() { var vd = this, wd = [], xd = 0; this.od.each(function(qb, rd) { if(!vd.ld || qb === vd.md) { wd[wd.length] = mboxCookieManager.yd(rd); if (xd < rd.expireOn) { xd = rd.expireOn; } } }); var zd = new Date(xd * 1000); var Db = []; Db.push(this.qb, '=', wd.join('|')); if (vd.nd) { Db.push('; expires=', zd.toGMTString()); } Db.push('; path=/', this.jd); document.cookie = Db.join(""); }, loadCookies: function() { var Ad = mboxCookieManager.Bd(this.qb), Cd = mboxCookieManager.Dd(Ad), Ed = Math.ceil(new Date().getTime() / 1000); this.od = new mboxMap(); for (var rb = 0; rb < Cd.length; rb++) { var rd = mboxCookieManager.Fd(Cd[rb]); if (Ed > rd.expireOn) { continue; } this.od.put(rd.name, rd); } }};mboxCookieManager.yd = function(rd) { return rd.name + '#' + rd.value + '#' + rd.expireOn;};mboxCookieManager.Fd = function(Y) { var Db = Y.split('#'); return mboxCookieManager.sd(Db[0], Db[1], Db[2]);};mboxCookieManager.sd = function(qb, _, qd) { return {name: qb, value: _, expireOn: qd};};mboxCookieManager.Bd = function(qb) { var result = new RegExp('(^|; )' + encodeURIComponent(qb) + '=([^;]*)').exec(document.cookie); return result ? result[2] : null;};mboxCookieManager.Dd = function(Y) { if (!Y) { return []; } return Y.split('|');};mboxSession = function(Gd, Hd, Id, Jd, Kd) { var Ld = window.mboxForceSessionId; this.Id = Id; this.Jd = Jd; this.Kd = Kd; this.ad = typeof(Ld) !== 'undefined' ? Ld : mboxGetPageParameter(Hd, true); this.ad = this.ad || Kd.getCookie(Id) || Gd; this.Kd.setCookie(Id, this.ad, Jd);};mboxSession.prototype = { constructor: mboxSession, getId: function() { return this.ad; }, forceId: function(Md) { this.ad = Md; this.Kd.setCookie(this.Id, this.ad, this.Jd); }};mboxPC = function(Id, Jd, Kd) { var Nd = window.mboxForcePCId; this.Id = Id; this.Jd = Jd; this.Kd = Kd; this.ad = typeof(Nd) != 'undefined' ? Nd: Kd.getCookie(Id); if (this.ad) { Kd.setCookie(Id, this.ad, Jd); }};mboxPC.prototype = { constructor: mboxPC, getId: function() { return this.ad; }, forceId: function(Md) { if (this.ad === Md) { return false; } this.ad = Md; this.Kd.setCookie(this.Id, this.ad, this.Jd); return true; }};(function(X, W, H, b, M) { var Od = new RegExp(".*\\.(\\d+)_\\d+"); function Bb(Qd) { var Rd = Od.exec(Qd); if (Rd && Rd.length === 2) { return M.U + Rd[1] + '.' + M.V; } return ''; } function Sd(Kd, Td) { var Ab = Bb(Td); if (!W.bb(Ab)) { Kd.setCookie(H.L, Ab, b.overrideMboxEdgeServerTimeout); } } function Ud(Vd, Kd) { this.Vd= Vd; this.Kd = Kd; Sd(Kd, Vd.getId()); } Ud.prototype = { constructor: Ud, getId: function() { return this.Vd.getId(); }, forceId: function(Md) { if (!this.Vd.forceId(Md)) { return false; } Sd(this.Kd, Md); return true; } }; X.Ud = Ud;}(TNT.a, TNT.a.W, TNT.a.H, TNT.a.b, TNT.a.M));mboxGetPageParameter = function(qb, Wd) { Wd = Wd || false; var Xd; if (Wd) { Xd = new RegExp("\\?[^#]*" + qb + "=([^\&;#]*)", "i"); } else { Xd = new RegExp("\\?[^#]*" + qb + "=([^\&;#]*)"); } var fc = null; var Yd = Xd.exec(document.location); if (Yd && Yd.length >= 2) { fc = Yd[1]; } return fc;};mboxCookiePageDomain = function() { var jd = (/([^:]*)(:[0-9]{0,5})?/).exec(document.location.host)[1]; var Zd = /[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/; if (!Zd.exec(jd)) { var _d = (/([^\.]+\.[^\.]{3}|[^\.]+\.[^\.]+\.[^\.]{2})$/).exec(jd); if (_d) { jd = _d[0]; if (jd.indexOf("www.") === 0) { jd=jd.substr(4); } } } return jd ? jd: "";};mboxShiftArray = function(ae) { var fc = []; for (var rb = 1; rb < ae.length; rb++) { fc[fc.length] = ae[rb]; } return fc;};mboxGenerateId = function() { var s = [], hex = '0123456789abcdef'; for (var i = 0; i < 36; i++) { s[i] = hex.substr(Math.floor(Math.random() * 0x10), 1); } s[14] = '4'; s[19] = hex.substr((s[19] & 0x3) | 0x8, 1); s[8] = s[13] = s[18] = s[23] = '-'; return s.join('').replace(/-/g, '');};mboxScreenHeight = function() { return screen.height;};mboxScreenWidth = function() { return screen.width;};mboxBrowserWidth = function() { return (window.innerWidth) ? window.innerWidth : document.documentElement ? document.documentElement.clientWidth : document.body.clientWidth;};mboxBrowserHeight = function() { return (window.innerHeight) ? window.innerHeight : document.documentElement ? document.documentElement.clientHeight : document.body.clientHeight;};mboxBrowserTimeOffset = function() { return -new Date().getTimezoneOffset();};mboxScreenColorDepth = function() { return screen.pixelDepth;};mbox = function(qb, ad, Mc, be, ce, Uc) { this.de = null; this.ee = 0; this.fe = be; this.ce = ce; this.ge = null; this.he = new mboxOfferContent(); this.fd = null; this.Mc = Mc; this.message = ''; this.ie = {}; this.je = 0; this.ke = 5; this.ad = ad; this.qb = qb; this.le(); Mc.addParameter(TNT.a.c.x, qb); Mc.addParameter(TNT.a.c.y, ad); this.me = function() {}; this.gd = function() {}; this.ne = null; this.oe = document.documentMode >= 10 && !Uc.isDomLoaded(); if (this.oe) { this.pe = TNT.a.nestedMboxes; this.pe.push(this.qb); }};mbox.prototype.getId = function() { return this.ad;};mbox.prototype.le = function() { var maxLength = TNT.a.M.T; if (this.qb.length > maxLength) { throw "Mbox Name " + this.qb + " exceeds max length of " + maxLength + " characters."; } else if (this.qb.match(/^\s+|\s+$/g)) { throw "Mbox Name " + this.qb + " has leading/trailing whitespace(s)."; }};mbox.prototype.getName = function() { return this.qb;};mbox.prototype.getParameters = function() { var nb = this.Mc.getParameters(); var fc = []; for (var rb = 0; rb < nb.length; rb++) { if (nb[rb].name.indexOf('mbox') !== 0) { fc[fc.length] = nb[rb].name + '=' + nb[rb].value; } } return fc;};mbox.prototype.setOnLoad = function(xb) { this.gd = xb; return this;};mbox.prototype.setMessage = function(qe) { this.message = qe; return this;};mbox.prototype.setOnError = function(me) { this.me = me; return this;};mbox.prototype.setFetcher = function(re) { if (this.ge) { this.ge.cancel(); } this.ge = re; return this;};mbox.prototype.getFetcher = function() { return this.ge;};function se(Mc, Tc) { var te = TNT.a, b = te.b, ue = b.mboxTimeout; if (te.yc() && te.zc()) { Mc.addParameters(te.Ic()); } Tc.ge.fetch(Mc); Tc.ve = setTimeout(function() { Tc.me('browser timeout', Tc.ge.getType()); }, ue);}function we(Tc) { var ne = Tc.getDefaultDiv(); if (ne) { Tc.xe(Tc.getDefaultDiv()); }}function ye(Mc, Tc, Cc) { var te = TNT.a; Tc.setFetcher(new mboxAjaxFetcher()); te.Dc(Cc, function(ze) { if (ze === null) { se(Mc, Tc); return; } if (Cc && ze.optout) { we(Tc); return; } Mc.addParameters(ze.params); se(Mc, Tc); });}mbox.prototype.load = function(nb) { var vd = this, Mc = vd.Mc, te = TNT.a, b = te.b, Cc = b.optoutEnabled; if (vd.ge === null) { return vd; } vd.cancelTimeout(); vd.ee = 0; if (nb && nb.length > 0) { Mc = vd.Mc.clone().addParameters(nb); } if (Cc && te.yc()) { ye(Mc, vd, Cc); return vd; } var yc = te.yc(); if (yc && !te.zc()) { ye(Mc, vd, false); return vd; } se(Mc, vd); return vd;};mbox.prototype.loaded = function() { this.cancelTimeout(); if (!this.activate() && this.je < this.ke) { var vd = this; setTimeout(function() { vd.loaded(); }, TNT.a.b.mboxLoadedTimeout); }};mbox.prototype.activate = function() { if (this.ee) { return this.ee; } if (this.oe && this.pe[this.pe.length - 1] !== this.qb) { return this.ee; } if (this.show()) { this.cancelTimeout(); this.ee = 1; } if (this.oe) { this.pe.pop(); } return this.ee;};mbox.prototype.isActivated = function() { return this.ee;};mbox.prototype.setOffer = function(he) { var Ae = he && he.show && he.setOnLoad; if (!Ae) { throw 'Invalid offer'; } var Be = TNT.a.b.globalMboxName === this.qb; Be = Be && he instanceof mboxOfferDefault; Be = Be && this.ge !== null; Be = Be && this.ge.getType() === 'ajax'; if (!Be) { this.he = he; return this; } var Ce = this.he.gd; this.he = he; this.he.setOnLoad(Ce); return this;};mbox.prototype.getOffer = function() { return this.he;};mbox.prototype.show = function() { return this.he.show(this);};mbox.prototype.showContent = function(hd) { if (!mbox.De(hd)) { return 0; } this.fd = mbox.Ee(this, this.fd); if (this.fd === null) { return 0; } if (!mbox.Fe(document.body, this.fd)) { return 0; } if (this.fd === hd) { this.xe(this.fd); this.gd(); return 1; } this.Ge(this.fd); this.Ge(hd); mbox.He(this, hd); this.xe(this.fd); this.gd(); return 1;};mbox.De = function(hd) { return hd !== undefined && hd !== null;};mbox.Fe = function(Ie, Je) { var DOCUMENT_POSITION_CONTAINED_BY = 16; var Ke = Ie.contains !== undefined; if (Ke) { return Ie !== Je && Ie.contains(Je); } else { return Boolean(Ie.compareDocumentPosition(Je) & DOCUMENT_POSITION_CONTAINED_BY); }};mbox.Ee = function(Tc, fd) { if (fd !== undefined && fd !== null && mbox.Fe(document.body, fd)) { return fd; } return Tc.getDefaultDiv();};mbox.He = function(Tc, Le) { Tc.fd.parentNode.replaceChild(Le, Tc.fd); Tc.fd = Le;};mbox.prototype.hide = function() { return this.showContent(this.getDefaultDiv());};mbox.prototype.finalize = function() { if (!this.getDefaultDiv()) { this.fe.force(); } if (!this.getDiv()) { this.fd = mbox.Ee(this, this.fd); } this.Me(); this.setFetcher(new mboxAjaxFetcher()); this.cancelTimeout(); this.gd();};mbox.prototype.cancelTimeout = function() { if (this.ve) { clearTimeout(this.ve); } if (this.ge) { this.ge.cancel(); }};mbox.prototype.getDiv = function() { return this.fd;};mbox.prototype.getDefaultDiv = function() { if (this.ne === null) { this.ne = this.fe.locate(); } return this.ne;};mbox.prototype.setEventTime = function(Ne) { this.ie[Ne] = (new Date()).getTime();};mbox.prototype.getEventTimes = function() { return this.ie;};mbox.prototype.getImportName = function() { return this.ce;};mbox.prototype.getURL = function() { return this.Mc.buildUrl();};mbox.prototype.getUrlBuilder = function() { return this.Mc;};mbox.prototype.Oe = function(fd) { return fd.style.display != 'none';};mbox.prototype.xe = function(fd) { this.Pe(fd, true);};mbox.prototype.Ge = function(fd) { this.Pe(fd, false);};mbox.prototype.Pe = function(fd, Qe) { fd.style.visibility = Qe ? "visible" : "hidden"; fd.style.display = Qe ? "block" : "none";};mbox.prototype.Me = function() { this.oe = false;};mbox.prototype.relocateDefaultDiv = function() { this.ne = this.fe.locate();};function Re(Uc) { Uc.getMboxes().each(function(Tc) { Tc.finalize(); });}mboxFactory = function(Ab, mb, Se) { var te = TNT.a; var b = te.b; var W = te.W; var H = te.H; var C = te.C; var M = te.M; var Te = b.mboxVersion; this.Ue = false; this.Se = Se; this.Sc = new mboxList(); mboxFactories.put(Se, this); this.Ve = b.mboxIsSupportedFunction() && typeof (window.attachEvent || document.addEventListener || window.addEventListener) != 'undefined'; this.We = this.Ve && mboxGetPageParameter(C.D, true) === null; var Xe = Se == M.N; var Id = M.O + (Xe ? '' : ('-' + Se)); this.Kd = new mboxCookieManager(Id, b.cookieDomainFunction()); if (!b.crossDomainXOnly) { this.We = this.We && this.Kd.isEnabled(); } this.We = this.We && W.ab(this.Kd.getCookie(H.D)) && W.ab(this.Kd.getCookie(H.K)); if (this.isAdmin()) { this.enable(); } this.Ye(); this.Ze = mboxGenerateId(); this._e = mboxScreenHeight(); this.af = mboxScreenWidth(); this.bf = mboxBrowserWidth(); this.cf = mboxBrowserHeight(); this.df = mboxScreenColorDepth(); this.ef = mboxBrowserTimeOffset(); this.ff = new mboxSession(this.Ze, C.E, H.E, b.sessionExpirationTimeout, this.Kd); var Vd = new mboxPC(H.m, b.tntIdLifetime, this.Kd); this.gf = b.overrideMboxEdgeServer ? new te.Ud(Vd, this.Kd) : Vd; this.Mc = new mboxUrlBuilder(Ab, mb); this.hf(this.Mc, Xe, Te); this.jf = new Date().getTime(); this.kf = this.jf; var vd = this; this.addOnLoad(function() { vd.kf = new Date().getTime(); }); if (this.Ve) { this.addOnLoad(function() { vd.Ue = true; Re(vd); TNT.a.nestedMboxes = []; }); if (this.We) { this.limitTraffic(b.trafficLevelPercentage, b.trafficDuration); this.lf(); this.mf = new mboxSignaler(this); } else { if (!b.isProduction) { if (this.isAdmin()) { if (!this.isEnabled()) { alert("mbox disabled, probably due to timeout\n" + "Reset your cookies to re-enable\n(this message will only appear in administrative mode)"); } else { alert("It looks like your browser will not allow " + b.companyName + " to set its administrative cookie. To allow setting the" + " cookie please lower the privacy settings of your browser.\n" + "(this message will only appear in administrative mode)"); } } } } }};mboxFactory.prototype.forcePCId = function(Md) { if (!TNT.a.b.clientTntIdSupport) { return; } if (this.gf.forceId(Md)) { this.ff.forceId(mboxGenerateId()); }};mboxFactory.prototype.forceSessionId = function(Md) { if (!TNT.a.b.clientSessionIdSupport) { return; } this.ff.forceId(Md);};mboxFactory.prototype.isEnabled = function() { return this.We;};mboxFactory.prototype.getDisableReason = function() { return this.Kd.getCookie(TNT.a.H.D);};mboxFactory.prototype.isSupported = function() { return this.Ve;};mboxFactory.prototype.disable = function(pd, nf) { if (typeof pd == 'undefined') { pd = 60 * 60; } if (typeof nf == 'undefined') { nf = 'unspecified'; } if (!this.isAdmin()) { this.We = false; this.Kd.setCookie(TNT.a.H.D, nf, pd); }};mboxFactory.prototype.enable = function() { this.We = true; this.Kd.deleteCookie(TNT.a.H.D);};mboxFactory.prototype.isAdmin = function() { return document.location.href.indexOf(TNT.a.C.F) != -1;};mboxFactory.prototype.limitTraffic = function(of, pd) { if (TNT.a.b.trafficLevelPercentage != 100) { if (of == 100) { return; } var pf = true; if (parseInt(this.Kd.getCookie(TNT.a.H.I)) != of) { pf = (Math.random() * 100) <= of; } this.Kd.setCookie(TNT.a.H.I, of, pd); if (!pf) { this.disable(60 * 60, 'limited by traffic'); } }};mboxFactory.prototype.addOnLoad = function(qf) { if (this.isDomLoaded()) { qf(); } else { var rf = false; var sf = function() { if (rf) { return; } rf = true; qf(); }; this.tf.push(sf); if (this.isDomLoaded() && !rf) { sf(); } }};mboxFactory.prototype.getEllapsedTime = function() { return this.kf - this.jf;};mboxFactory.prototype.getEllapsedTimeUntil = function(A) { return A - this.jf;};mboxFactory.prototype.getMboxes = function() { return this.Sc;};mboxFactory.prototype.get = function(x, y) { return this.Sc.get(x).getById(y || 0);};mboxFactory.prototype.update = function(x, nb) { var te = TNT.a, c = te.c; if (!this.isEnabled()) { return; } var vd = this; if (!this.isDomLoaded()) { this.addOnLoad(function() { vd.update(x, nb); }); return; } if (this.Sc.get(x).length() === 0) { throw "Mbox " + x + " is not defined"; } this.Sc.get(x).each(function(Tc) { var Mc = Tc.getUrlBuilder(); Mc.addParameter(c.d, mboxGenerateId()); vd.uf(Mc, x); vd.vf(Mc, x); Tc.load(nb); });};mboxFactory.prototype.setVisitorIdParameters = function(Mc, x) { this.uf(Mc, x); this.wf(Mc, x);};mboxFactory.prototype.create = function(x, nb, xf) { var Tc = this.yf(x, nb, xf); if (Tc) { this.uf(Tc.getUrlBuilder(), x); } return Tc;};mboxFactory.prototype.zf = function(x, nb, xf) { return this.yf(x, nb, xf);};mboxFactory.prototype.yf = function(x, nb, xf) { if (!this.isSupported()) { return null; } var Af = new Date(); var A = Af.getTime() - (Af.getTimezoneOffset() * TNT.a.M.Q); var Mc = this.Mc.clone(); Mc.addParameter(TNT.a.c.j, this.Sc.length() + 1); Mc.addParameter(TNT.a.c.A, A); Mc.addParameters(nb); this.vf(Mc, x); var y, fe, Tc; if (xf) { fe = new mboxLocatorNode(xf); } else { if (this.Ue) { throw 'The page has already been loaded, can\'t write marker'; } fe = new mboxLocatorDefault(this._c(x)); } try { y = this.Sc.get(x).length(); Tc = new mbox(x, y, Mc, fe, this.Bf(x), this); if (this.We) { Tc.setFetcher(this.Ue ? new mboxAjaxFetcher() : new mboxStandardFetcher()); } var vd = this; Tc.setOnError(function(qe, vb) { Tc.setMessage(qe); Tc.activate(); if (!Tc.isActivated()) { vd.disable(TNT.a.b.mboxFactoryDisabledTimeout, qe); window.location.reload(false); } }); this.Sc.add(Tc); } catch (Cf) { this.disable(); throw 'Failed creating mbox "' + x + '", the error was: ' + Cf; } return Tc;};mboxFactory.prototype.Df = function(Mc) { var m = this.gf.getId(); if (m) { Mc.addParameter(TNT.a.c.m, m); }};mboxFactory.prototype.Ef = function(Mc, x) { var Ff = !TNT.isAutoCreateGlobalMbox() && TNT.getGlobalMboxName() === x; if (Ff) { Mc.addParameters(TNT.getTargetPageParameters()); }};mboxFactory.prototype.uf = function(Mc, x) { var te = TNT.a, Gf = te.c.i, i = te.Jc(x); if (i) { Mc.addParameter(Gf, i); }};mboxFactory.prototype.wf = function(Mc) { var te = TNT.a; if (te.yc() && te.zc()) { Mc.addParameters(te.Ic()); }};mboxFactory.prototype.vf = function(Mc, x) { this.Df(Mc); this.Ef(Mc, x); this.wf(Mc, x);};mboxFactory.prototype.getCookieManager = function() { return this.Kd;};mboxFactory.prototype.getPageId = function() { return this.Ze;};mboxFactory.prototype.getPCId = function() { return this.gf;};mboxFactory.prototype.getSessionId = function() { return this.ff;};mboxFactory.prototype.getSignaler = function() { return this.mf;};mboxFactory.prototype.getUrlBuilder = function() { return this.Mc;};mboxFactory.prototype.Hf = function(x) { return this.Se + '-' + x + '-' + this.Sc.get(x).length();};mboxFactory.prototype._c = function(x) { return TNT.a.M.S + this.Hf(x);};mboxFactory.prototype.Bf = function(x) { return TNT.a.M.P + this.Hf(x);};mboxFactory.prototype.hf = function(Mc, Xe, Te) { Mc.addParameter(TNT.a.c.k, document.location.hostname); Mc.addParameter(TNT.a.c.d, this.Ze); Mc.addParameter(TNT.a.c.n, this._e); Mc.addParameter(TNT.a.c.o, this.af); Mc.addParameter(TNT.a.c.p, this.bf); Mc.addParameter(TNT.a.c.q, this.cf); Mc.addParameter(TNT.a.c.r, this.ef); Mc.addParameter(TNT.a.c.s, this.df); Mc.addParameter(TNT.a.C.E, this.ff.getId()); if (!Xe) { Mc.addParameter(TNT.a.c.l, this.Se); } if (TNT.a.b.crossDomainEnabled) { Mc.addParameter(TNT.a.c.t, TNT.a.b.crossDomain); } var c = TNT.getClientMboxExtraParameters(); if (c) { Mc.addParameters(c.split('&')); } Mc.setUrlProcessAction(function(u) { if (TNT.a.b.passPageParameters) { u += '&'; u += TNT.a.c.u; u += '=' + encodeURIComponent(document.location); var v = encodeURIComponent(document.referrer); if (u.length + v.length < 2000) { u += '&'; u += TNT.a.c.v; u += '=' + v; } } u += '&'; u += TNT.a.c.w; u += '=' + Te; return u; });};mboxFactory.prototype.lf = function() { document.write('<style>.' + TNT.a.M.R + ' { visibility:hidden; }</style>');};mboxFactory.prototype.isDomLoaded = function() { return this.Ue;};mboxFactory.prototype.Ye = function() { if (this.tf) { return; } this.tf = []; var vd = this; (function() { var If = document.addEventListener ? "DOMContentLoaded" : "onreadystatechange"; var Jf = false; var Kf = function() { if (Jf) { return; } Jf = true; for (var i = 0; i < vd.tf.length; ++i) { vd.tf[i](); } }; if (document.addEventListener) { document.addEventListener(If, function() { document.removeEventListener(If, arguments.callee, false); Kf(); }, false); window.addEventListener("load", function(){ document.removeEventListener("load", arguments.callee, false); Kf(); }, false); } else if (document.attachEvent) { if (self !== self.top) { document.attachEvent(If, function() { if (document.readyState === 'complete') { document.detachEvent(If, arguments.callee); Kf(); } }); } else { var Lf = function() { try { document.documentElement.doScroll('left'); Kf(); } catch (Mf) { setTimeout(Lf, 13); } }; Lf(); } } if (document.readyState === "complete") { Kf(); } })();};(function(X) { function Nf(Of, Id, pd, Kd) { if (Of.targetJSLoaded) { return; } Kd.setCookie(Id, true, pd); window.location.reload(); } function Pf(b, H, Kd) { var Qf = '_AT', Sf = 50, Id = H.K, pd = b.experienceManagerDisabledTimeout, de = b.experienceManagerTimeout, u = b.experienceManagerPluginUrl, Tf = function(Uf) {}, Vf = function(Uf) { setTimeout(function() { window[Qf].applyWhenReady(Uf); }, Sf); }; if (Qf in window) { return; } window[Qf] = {}; if (Kd.getCookie(Id) !== 'true') { document.write('<scr' + 'ipt src="' + u + '"><\/sc' + 'ript>'); window[Qf].applyWhenReady = Vf; setTimeout(function() { Nf(window[Qf], Id, pd, Kd); }, de); } else { window[Qf].applyWhenReady = Tf; } } X.Pf = Pf;}(TNT.a));(function(X, a, W, b, c, M){ function Wf() { return b.globalMboxName; } function Xf() { return b.globalMboxLocationDomId; } function Yf() { return b.globalMboxAutoCreate; } function Zf() { return b.parametersFunction(); } function _f() { var cd = 1, ag = document.getElementsByTagName('script'), dd = ag[ag.length - 1]; while (dd) { if (dd.nodeType === cd && dd.className === M.R) { return dd; } dd = dd.previousSibling; } return null; } function bg(Uc, x, c) { var xf, Tc; if (a.yc()) { xf = _f(); Tc = Uc.create( x, c, xf); } else { Tc = Uc.create( x, c); } if (Tc && Uc.isEnabled()) { Tc.load(); } return Tc; } function cg(Uc, xf, x, c) { return Uc.zf(x, c, xf); } function dg(Uc, x, c) { Uc.update(x, c); } function eg(Kd, qb) { return Kd.getCookie(qb); } function fg(Kd, qb, _, pd) { Kd.setCookie(qb, _, pd); } function gg(hg) { var fc = []; var ig = /([^&=]+)=([^&]*)/g; var jg = decodeURIComponent; var Rd = ig.exec(hg); while (Rd) { fc.push([jg(Rd[1]), jg(Rd[2])].join('=')); Rd = ig.exec(hg); } return fc; } function dc(kg, Qc, cc) { var fc = []; for (var Zb in kg) { if (!kg.hasOwnProperty(Zb)) { continue; } var _ = kg[Zb]; if (W.fb(_)) { Qc.push(Zb); fc = fc.concat(dc(_, Qc, cc)); Qc.pop(); } else { if (Qc.length > 0) { fc.push([cc(Qc.concat(Zb).join('.')), _].join('=')); } else { fc.push([cc(Zb), _].join('=')); } } } return fc; } function lg() { var mg = window.targetPageParams, cc = function(Zb) { return Zb }; if (!W.cb(mg)) { return []; } var fc = null; try { fc = mg(); } catch (ng) {} if (W.ab(fc)) { return []; } if (W.db(fc)) { return fc; } if (W.eb(fc) && !W.bb(fc)) { return gg(fc); } if (W.fb(fc)) { return dc(fc, [], cc); } return []; } function og(Uc) { var pg = Wf(), qg = Xf(), rg = lg(), sg, tg, ug; if (!qg) { qg = "mbox-" + pg + "-" + mboxGenerateId(); sg = document.createElement("div"); sg.className = "mboxDefault"; sg.id = qg; sg.style.visibility = "hidden"; sg.style.display = "none"; tg = setInterval(function(){ if (document.body) { clearInterval(tg); document.body.insertBefore(sg, document.body.firstChild); } }, b.bodyPollingTimeout); } ug = Uc.create(pg, rg, qg); if (ug && Uc.isEnabled()) { if (!Uc.isDomLoaded()) { if (!a.yc()) { ug.setFetcher(new a.Oc()); } else if (a.zc()) { ug.setFetcher(new a.Oc()); } else { ug.setFetcher(new mboxAjaxFetcher()); } } ug.load(); } } function vg(Uc, x, nb) { if (!Uc.isEnabled()) { return; } var Af = new Date(), wg = Af.getTimezoneOffset() * M.Q, Mc = Uc.getUrlBuilder().clone(); Mc.setBasePath('/m2/' + b.clientCode + '/viztarget'); Mc.addParameter(c.x, x); Mc.addParameter(c.y, 0); Mc.addParameter(c.j, Uc.getMboxes().length() + 1); Mc.addParameter(c.A, Af.getTime() - wg); Mc.addParameter(c.d, mboxGenerateId()); Mc.addParameter(c.z, Uc.isDomLoaded()); if (nb && nb.length > 0) { Mc.addParameters(nb); } Uc.Df(Mc); Uc.xg(Mc, x); Uc.uf(Mc, x); return Mc.buildUrl(); } function yg() { return new mboxMap(); } function zg(Ag, mb, Se) { return new mboxFactory(Ag, mb, Se); } a.bg = bg; a.cg = cg; a.dg = dg; a.vg = vg; a.eg = eg; a.fg = fg; a.og = og; a.yg = yg; a.zg = zg; a.dc = dc; X.getGlobalMboxName = Wf; X.getGlobalMboxLocation = Xf; X.isAutoCreateGlobalMbox = Yf; X.getClientMboxExtraParameters = Zf; X.getTargetPageParameters = lg;}(TNT, TNT.a, TNT.a.W, TNT.a.b, TNT.a.c, TNT.a.M));(function(X){ function Bg(Kd, b, Cg, Dg) { var Eg = 60 * 60, Fg = mboxGetPageParameter(Cg, true) || Kd.getCookie(Dg); if (!Fg) { return; } setTimeout(function() { if (typeof(window.mboxDebugLoaded) === 'undefined') { alert('Could not load the remote debug.\nPlease check your connection to ' + b.companyName + ' servers'); } }, Eg); var Db = []; Db.push(b.adminUrl, '/mbox/mbox_debug.jsp', '?'); Db.push('mboxServerHost', '=', b.serverHost, '&'); Db.push('clientCode', '=', b.clientCode); document.write('<' + 'scr' + 'ipt src="' + Db.join('') + '"><' + '\/scr' + 'ipt>'); } function Gg (b, Hg) { var W = X.W, Ig, Jg, _; if (W.Z(b) || W.ab(b) || !W.fb(b)) { return Hg; } for (var Zb in b) { Ig = b.hasOwnProperty(Zb) && Hg.hasOwnProperty(Zb); _ = b[Zb]; Jg = !W.Z(_) && !W.ab(_); if (Ig && Jg) { Hg[Zb] = _; } } return Hg; } function Kg(Uc, Kd) { TNT.createGlobalMbox = function() { X.og(Uc); }; window.mboxCreate = function(x ) { var c = [].slice.call(arguments, 1); return X.bg(Uc, x, c); }; window.mboxDefine = function(xf, x ) { var c = [].slice.call(arguments, 2); return X.cg(Uc, xf, x, c); }; window.mboxUpdate = function(x ) { var c = [].slice.call(arguments, 1); X.dg(Uc, x, c); }; window.mboxVizTargetUrl = function(x ) { var c = [].slice.call(arguments, 1); return X.vg(Uc, x, c); }; window.mboxSetCookie = function(qb, _, pd) { return X.fg(Kd, qb, _, pd); }; window.mboxGetCookie = function(qb) { return X.eg(Kd, qb); }; if (typeof(X.Lg) !== 'undefined') { window.mboxLoadSCPlugin = function(Mg) { return X.Lg(Uc, Mg); } } } function Ng() { if (typeof(window.mboxVersion) !== 'undefined') { return; } X.b = Gg(window.targetGlobalSettings, X.b); var b = X.b, Te = b.mboxVersion, Ag = b.serverHost, mb = b.clientCode, N = X.M.N, Cg = X.C.G, Dg = X.H.G, Og = X.H.L, Uc, Kd; window.mboxFactories = X.yg(); window.mboxFactoryDefault = Uc = X.zg(Ag, mb, N); window.mboxVersion = Te; Kd = Uc.getCookieManager(); Kg(Uc, Kd); Bg(Kd, b, Cg, Dg); X.Bb = function(Pg) { var lb; if (!b.overrideMboxEdgeServer) { return Pg; } lb = Kd.getCookie(Og); return lb === null ? Pg : lb; } } X.Ng = Ng;}(TNT.a));TNT.a.Ng();TNT.a.Pf(TNT.a.b, TNT.a.H,window.mboxFactoryDefault.getCookieManager());var mboxTrack=function(mbox,params){var m,u,i,f=mboxFactoryDefault;if(f.getMboxes().length()>0){m=f.getMboxes().getById(0);u=m.getURL().replace("mbox="+m.getName(),"mbox="+mbox).replace("mboxPage="+f.getPageId(),"mboxPage="+mboxGenerateId())+'&'+params,i=new Image();i.style.display='none';i.src=u;document.body.appendChild(i)}else{f.getSignaler().signal('onEvent',mbox+'&'+params)}},mboxTrackLink=function(mbox,params,url){mboxTrack(mbox,params);setTimeout("location='"+url+"'",500)}; function tt_Log(URL){ mboxTrack('barc_onClick','Destination='+URL); } function tt_Redirect(URL){ mboxTrack('barc_onClick','Destination='+URL); setTimeout("location='"+URL+"'",500); }; mboxFactory.prototype.update=function(a,b){if(!this.isEnabled()){return}var c=this;if(!this.isDomLoaded()){this.addOnLoad(function(){c.update(a,b)});return}if(this.F.get(a).length()==0){throw"Mbox "+a+" is not defined"}this.F.get(a).each(function(a){a.Rb=function(b,d){a.setMessage(b);a.activate();if(!a.isActivated()){c.disable(60*60,b)}};a.getUrlBuilder().addParameter("mboxPage",mboxGenerateId());a.load(b)})};mboxFactoryDefault.removeMboxByName = function(x) {for (var i=this.Sc.Sc.length-1, mb; mb=this.Sc.Sc[i], i>=0; i--) { if (mb.getName() == x) { this.Sc.Sc.splice(i,1);  }}};if (TNT.isAutoCreateGlobalMbox()) { TNT.createGlobalMbox();}
+var mboxCopyright = "Copyright 1996-2010. Adobe Systems Incorporated. All rights reserved";
+mboxUrlBuilder = function(B, A) {
+    this.a = B;
+    this.b = A;
+    this.c = new Array();
+    this.d = function(C) {
+        return C
+    };
+    this.f = null
+};
+mboxUrlBuilder.prototype.addParameter = function(F, E) {
+    var D = new RegExp("('|\")");
+    if (D.exec(F)) {
+        throw "Parameter '" + F + "' contains invalid characters"
+    }
+    for (var C = 0; C < this.c.length; C++) {
+        var B = this.c[C];
+        if (B.name == F) {
+            B.value = E;
+            return this
+        }
+    }
+    var A = new Object();
+    A.name = F;
+    A.value = E;
+    this.c[this.c.length] = A;
+    return this
+};
+mboxUrlBuilder.prototype.addParameters = function(C) {
+    if (!C) {
+        return this
+    }
+    for (var B = 0; B < C.length; B++) {
+        var A = C[B].indexOf("=");
+        if (A == -1 || A == 0) {
+            continue
+        }
+        this.addParameter(C[B].substring(0, A), C[B].substring(A + 1, C[B].length))
+    }
+    return this
+};
+mboxUrlBuilder.prototype.setServerType = function(A) {
+    this.o = A
+};
+mboxUrlBuilder.prototype.setBasePath = function(A) {
+    this.f = A
+};
+mboxUrlBuilder.prototype.setUrlProcessAction = function(A) {
+    this.d = A
+};
+mboxUrlBuilder.prototype.buildUrl = function() {
+    var E = this.f ? this.f : "/m2/" + this.b + "/mbox/" + this.o;
+    var D = document.location.protocol == "file:" ? "http:" : document.location.protocol;
+    var F = D + "//" + this.a + E;
+    var C = F.indexOf("?") != -1 ? "&" : "?";
+    for (var B = 0; B < this.c.length; B++) {
+        var A = this.c[B];
+        F += C + encodeURIComponent(A.name) + "=" + encodeURIComponent(A.value);
+        C = "&"
+    }
+    return this.t(this.d(F))
+};
+mboxUrlBuilder.prototype.getParameters = function() {
+    return this.c
+};
+mboxUrlBuilder.prototype.setParameters = function(A) {
+    this.c = A
+};
+mboxUrlBuilder.prototype.clone = function() {
+    var B = new mboxUrlBuilder(this.a, this.b);
+    B.setServerType(this.o);
+    B.setBasePath(this.f);
+    B.setUrlProcessAction(this.d);
+    for (var A = 0; A < this.c.length; A++) {
+        B.addParameter(this.c[A].name, this.c[A].value)
+    }
+    return B
+};
+mboxUrlBuilder.prototype.t = function(A) {
+    return A.replace(/\"/g, "&quot;").replace(/>/g, "&gt;")
+};
+mboxStandardFetcher = function() {};
+mboxStandardFetcher.prototype.getType = function() {
+    return "standard"
+};
+mboxStandardFetcher.prototype.fetch = function(A) {
+    A.setServerType(this.getType());
+    document.write('<script src="' + A.buildUrl() + '" type="text/javascript"><\/script>')
+};
+mboxStandardFetcher.prototype.cancel = function() {};
+mboxAjaxFetcher = function() {};
+mboxAjaxFetcher.prototype.getType = function() {
+    return "ajax"
+};
+mboxAjaxFetcher.prototype.fetch = function(A) {
+    A.setServerType(this.getType());
+    var B = A.buildUrl();
+    this.x = document.createElement("script");
+    this.x.src = B;
+    document.body.appendChild(this.x)
+};
+mboxAjaxFetcher.prototype.cancel = function() {};
+mboxMap = function() {
+    this.y = new Object();
+    this.z = new Array()
+};
+mboxMap.prototype.put = function(B, C) {
+    if (!this.y[B]) {
+        this.z[this.z.length] = B
+    }
+    this.y[B] = C
+};
+mboxMap.prototype.get = function(B) {
+    return this.y[B]
+};
+mboxMap.prototype.remove = function(B) {
+    this.y[B] = undefined
+};
+mboxMap.prototype.each = function(F) {
+    for (var D = 0; D < this.z.length; D++) {
+        var C = this.z[D];
+        var E = this.y[C];
+        if (E) {
+            var G = F(C, E);
+            if (G === false) {
+                break
+            }
+        }
+    }
+};
+mboxFactory = function(F, A, E) {
+    this.E = false;
+    this.C = F;
+    this.D = E;
+    this.F = new mboxList();
+    mboxFactories.put(E, this);
+    this.G = typeof document.createElement("div").replaceChild != "undefined" && (function() {
+        return true
+    })() && typeof document.getElementById != "undefined" && typeof(window.attachEvent || document.addEventListener || window.addEventListener) != "undefined" && typeof encodeURIComponent != "undefined";
+    this.H = this.G && mboxGetPageParameter("mboxDisable") == null;
+    var B = E == "default";
+    this.J = new mboxCookieManager("mbox" + (B ? "" : ("-" + E)), (function() {
+        return mboxCookiePageDomain()
+    })());
+    this.H = this.H && this.J.isEnabled() && (this.J.getCookie("disable") == null);
+    if (this.isAdmin()) {
+        this.enable()
+    }
+    this.K();
+    this.L = mboxGenerateId();
+    this.M = mboxScreenHeight();
+    this.N = mboxScreenWidth();
+    this.O = mboxBrowserWidth();
+    this.P = mboxBrowserHeight();
+    this.Q = mboxScreenColorDepth();
+    this.R = mboxBrowserTimeOffset();
+    this.S = new mboxSession(this.L, "mboxSession", "session", 31 * 60, this.J);
+    this.T = new mboxPC("PC", 1209600, this.J);
+    this.w = new mboxUrlBuilder(F, A);
+    this.U(this.w, B);
+    this.V = new Date().getTime();
+    this.W = this.V;
+    var G = this;
+    this.addOnLoad(function() {
+        G.W = new Date().getTime()
+    });
+    if (this.G) {
+        this.addOnLoad(function() {
+            G.E = true;
+            G.getMboxes().each(function(C) {
+                C.setFetcher(new mboxAjaxFetcher());
+                C.finalize()
+            })
+        });
+        this.limitTraffic(100, 10368000);
+        if (this.H) {
+            this.Z();
+            this._ = new mboxSignaler(function(C, D) {
+                return G.create(C, D)
+            }, this.J)
+        }
+    }
+};
+mboxFactory.prototype.isEnabled = function() {
+    return this.H
+};
+mboxFactory.prototype.getDisableReason = function() {
+    return this.J.getCookie("disable")
+};
+mboxFactory.prototype.isSupported = function() {
+    return this.G
+};
+mboxFactory.prototype.disable = function(B, A) {
+    if (typeof B == "undefined") {
+        B = 60 * 60
+    }
+    if (typeof A == "undefined") {
+        A = "unspecified"
+    }
+    if (!this.isAdmin()) {
+        this.H = false;
+        this.J.setCookie("disable", A, B)
+    }
+};
+mboxFactory.prototype.enable = function() {
+    this.H = true;
+    this.J.deleteCookie("disable")
+};
+mboxFactory.prototype.isAdmin = function() {
+    return document.location.href.indexOf("mboxEnv") != -1
+};
+mboxFactory.prototype.limitTraffic = function(A, B) {};
+mboxFactory.prototype.addOnLoad = function(A) {
+    if (this.isDomLoaded()) {
+        A()
+    } else {
+        var B = false;
+        var C = function() {
+            if (B) {
+                return
+            }
+            B = true;
+            A()
+        };
+        this.hb.push(C);
+        if (this.isDomLoaded() && !B) {
+            C()
+        }
+    }
+};
+mboxFactory.prototype.getEllapsedTime = function() {
+    return this.W - this.V
+};
+mboxFactory.prototype.getEllapsedTimeUntil = function(A) {
+    return A - this.V
+};
+mboxFactory.prototype.getMboxes = function() {
+    return this.F
+};
+mboxFactory.prototype.get = function(B, A) {
+    return this.F.get(B).getById(A || 0)
+};
+mboxFactory.prototype.update = function(A, C) {
+    if (!this.isEnabled()) {
+        return
+    }
+    if (!this.isDomLoaded()) {
+        var B = this;
+        this.addOnLoad(function() {
+            B.update(A, C)
+        });
+        return
+    }
+    if (this.F.get(A).length() == 0) {
+        throw "Mbox " + A + " is not defined"
+    }
+    this.F.get(A).each(function(D) {
+        D.getUrlBuilder().addParameter("mboxPage", mboxGenerateId());
+        D.load(C)
+    })
+};
+mboxFactory.prototype.create = function(L, H, F) {
+    if (!this.isSupported()) {
+        return null
+    }
+    var G = this.w.clone();
+    G.addParameter("mboxCount", this.F.length() + 1);
+    G.addParameters(H);
+    var K = this.F.get(L).length();
+    var C = this.D + "-" + L + "-" + K;
+    var J;
+    if (F) {
+        J = new mboxLocatorNode(F)
+    } else {
+        if (this.E) {
+            throw "The page has already been loaded, can't write marker"
+        }
+        J = new mboxLocatorDefault(C)
+    }
+    try {
+        var B = this;
+        var E = "mboxImported-" + C;
+        var A = new mbox(L, K, G, J, E);
+        if (this.H) {
+            A.setFetcher(this.E ? new mboxAjaxFetcher() : new mboxStandardFetcher())
+        }
+        A.setOnError(function(M, N) {
+            A.setMessage(M);
+            A.activate();
+            if (!A.isActivated()) {
+                B.disable(60 * 60, M);
+                window.location.reload(false)
+            }
+        });
+        this.F.add(A)
+    } catch (I) {
+        this.disable();
+        throw 'Failed creating mbox "' + L + '", the error was: ' + I
+    }
+    var D = new Date();
+    G.addParameter("mboxTime", D.getTime() - (D.getTimezoneOffset() * 60000));
+    return A
+};
+mboxFactory.prototype.getCookieManager = function() {
+    return this.J
+};
+mboxFactory.prototype.getPageId = function() {
+    return this.L
+};
+mboxFactory.prototype.getPCId = function() {
+    return this.T
+};
+mboxFactory.prototype.getSessionId = function() {
+    return this.S
+};
+mboxFactory.prototype.getSignaler = function() {
+    return this._
+};
+mboxFactory.prototype.getUrlBuilder = function() {
+    return this.w
+};
+mboxFactory.prototype.U = function(B, A) {
+    B.addParameter("mboxHost", document.location.hostname).addParameter("mboxSession", this.S.getId());
+    if (!A) {
+        B.addParameter("mboxFactoryId", this.D)
+    }
+    if (this.T.getId() != null) {
+        B.addParameter("mboxPC", this.T.getId())
+    }
+    B.addParameter("mboxPage", this.L);
+    B.addParameter("screenHeight", this.M);
+    B.addParameter("screenWidth", this.N);
+    B.addParameter("browserWidth", this.O);
+    B.addParameter("browserHeight", this.P);
+    B.addParameter("browserTimeOffset", this.R);
+    B.addParameter("colorDepth", this.Q);
+    B.setUrlProcessAction(function(D) {
+        D += "&mboxURL=" + encodeURIComponent(document.location);
+        var C = encodeURIComponent(document.referrer);
+        if (D.length + C.length < 2000) {
+            D += "&mboxReferrer=" + C
+        }
+        D += "&mboxVersion=" + mboxVersion;
+        return D
+    })
+};
+mboxFactory.prototype.sb = function() {
+    return ""
+};
+mboxFactory.prototype.Z = function() {
+    document.write("<style>.mboxDefault { visibility:hidden; }</style>")
+};
+mboxFactory.prototype.isDomLoaded = function() {
+    return this.E
+};
+mboxFactory.prototype.K = function() {
+    if (this.hb != null) {
+        return
+    }
+    this.hb = new Array();
+    var A = this;
+    (function() {
+        var B = document.addEventListener ? "DOMContentLoaded" : "onreadystatechange";
+        var C = false;
+        var D = function() {
+            if (C) {
+                return
+            }
+            C = true;
+            for (var F = 0; F < A.hb.length;
+                ++F) {
+                A.hb[F]()
+            }
+        };
+        if (document.addEventListener) {
+            document.addEventListener(B, function() {
+                document.removeEventListener(B, arguments.callee, false);
+                D()
+            }, false);
+            window.addEventListener("load", function() {
+                document.removeEventListener("load", arguments.callee, false);
+                D()
+            }, false)
+        } else {
+            if (document.attachEvent) {
+                if (self !== self.top) {
+                    document.attachEvent(B, function() {
+                        if (document.readyState === "complete") {
+                            document.detachEvent(B, arguments.callee);
+                            D()
+                        }
+                    })
+                } else {
+                    var E = function() {
+                        try {
+                            document.documentElement.doScroll("left");
+                            D()
+                        } catch (F) {
+                            setTimeout(E, 13)
+                        }
+                    };
+                    E()
+                }
+            }
+        }
+        if (document.readyState === "complete") {
+            D()
+        }
+    })()
+};
+mboxSignaler = function(B, D) {
+    this.J = D;
+    var C = D.getCookieNames("signal-");
+    for (var E = 0; E < C.length; E++) {
+        var G = C[E];
+        var A = D.getCookie(G).split("&");
+        var F = B(A[0], A);
+        F.load();
+        D.deleteCookie(G)
+    }
+};
+mboxSignaler.prototype.signal = function(A, B) {
+    this.J.setCookie("signal-" + A, mboxShiftArray(arguments).join("&"), 45 * 60)
+};
+mboxList = function() {
+    this.F = new Array()
+};
+mboxList.prototype.add = function(A) {
+    if (A != null) {
+        this.F[this.F.length] = A
+    }
+};
+mboxList.prototype.get = function(C) {
+    var E = new mboxList();
+    for (var A = 0; A < this.F.length; A++) {
+        var D = this.F[A];
+        if (D.getName() == C) {
+            E.add(D)
+        }
+    }
+    return E
+};
+mboxList.prototype.getById = function(A) {
+    return this.F[A]
+};
+mboxList.prototype.length = function() {
+    return this.F.length
+};
+mboxList.prototype.each = function(B) {
+    if (typeof B != "function") {
+        throw "Action must be a function, was: " + typeof(B)
+    }
+    for (var A = 0; A < this.F.length; A++) {
+        B(this.F[A])
+    }
+};
+mboxLocatorDefault = function(A) {
+    this.g = "mboxMarker-" + A;
+    document.write('<div id="' + this.g + '" style="visibility:hidden;display:none">&nbsp;</div>')
+};
+mboxLocatorDefault.prototype.locate = function() {
+    var A = document.getElementById(this.g);
+    while (A != null) {
+        if (A.nodeType == 1) {
+            if (A.className == "mboxDefault") {
+                return A
+            }
+        }
+        A = A.previousSibling
+    }
+    return null
+};
+mboxLocatorDefault.prototype.force = function() {
+    var A = document.createElement("div");
+    A.className = "mboxDefault";
+    var B = document.getElementById(this.g);
+    B.parentNode.insertBefore(A, B);
+    return A
+};
+mboxLocatorNode = function(A) {
+    this.Eb = A
+};
+mboxLocatorNode.prototype.locate = function() {
+    return typeof this.Eb == "string" ? document.getElementById(this.Eb) : this.Eb
+};
+mboxLocatorNode.prototype.force = function() {
+    return null
+};
+mboxCreate = function(A) {
+    var B = mboxFactoryDefault.create(A, mboxShiftArray(arguments));
+    if (B) {
+        B.load()
+    }
+    return B
+};
+mboxDefine = function(A, B) {
+    var C = mboxFactoryDefault.create(B, mboxShiftArray(mboxShiftArray(arguments)), A);
+    return C
+};
+mboxUpdate = function(A) {
+    mboxFactoryDefault.update(A, mboxShiftArray(arguments))
+};
+mbox = function(E, C, B, D, A) {
+    this.Kb = null;
+    this.Lb = 0;
+    this.mb = D;
+    this.nb = A;
+    this.Mb = null;
+    this.Nb = new mboxOfferContent();
+    this.Fb = null;
+    this.w = B;
+    this.message = "";
+    this.Ob = new Object();
+    this.Pb = 0;
+    this.Ib = C;
+    this.g = E;
+    this.Qb();
+    B.addParameter("mbox", E).addParameter("mboxId", C);
+    this.Rb = function() {};
+    this.Sb = function() {};
+    this.Tb = null
+};
+mbox.prototype.getId = function() {
+    return this.Ib
+};
+mbox.prototype.Qb = function() {
+    if (this.g.length > 250) {
+        throw "Mbox Name " + this.g + " exceeds max length of 250 characters."
+    } else {
+        if (this.g.match(/^\s+|\s+$/g)) {
+            throw "Mbox Name " + this.g + " has leading/trailing whitespace(s)."
+        }
+    }
+};
+mbox.prototype.getName = function() {
+    return this.g
+};
+mbox.prototype.getParameters = function() {
+    var D = this.w.getParameters();
+    var C = new Array();
+    for (var A = 0; A < D.length; A++) {
+        if (D[A].name.indexOf("mbox") != 0) {
+            C[C.length] = D[A].name + "=" + D[A].value
+        }
+    }
+    return C
+};
+mbox.prototype.setOnLoad = function(A) {
+    this.Sb = A;
+    return this
+};
+mbox.prototype.setMessage = function(A) {
+    this.message = A;
+    return this
+};
+mbox.prototype.setOnError = function(A) {
+    this.Rb = A;
+    return this
+};
+mbox.prototype.setFetcher = function(A) {
+    if (this.Mb) {
+        this.Mb.cancel()
+    }
+    this.Mb = A;
+    return this
+};
+mbox.prototype.getFetcher = function() {
+    return this.Mb
+};
+mbox.prototype.load = function(C) {
+    if (this.Mb == null) {
+        return this
+    }
+    this.setEventTime("load.start");
+    this.cancelTimeout();
+    this.Lb = 0;
+    var A = (C && C.length > 0) ? this.w.clone().addParameters(C) : this.w;
+    this.Mb.fetch(A);
+    var B = this;
+    this.Vb = setTimeout(function() {
+        B.Rb("browser timeout", B.Mb.getType())
+    }, 15000);
+    this.setEventTime("load.end");
+    return this
+};
+mbox.prototype.loaded = function() {
+    this.cancelTimeout();
+    if (!this.activate()) {
+        var A = this;
+        setTimeout(function() {
+            A.loaded()
+        }, 100)
+    }
+};
+mbox.prototype.activate = function() {
+    if (this.Lb) {
+        return this.Lb
+    }
+    this.setEventTime("activate" + ++this.Pb + ".start");
+    if (this.show()) {
+        this.cancelTimeout();
+        this.Lb = 1
+    }
+    this.setEventTime("activate" + this.Pb + ".end");
+    return this.Lb
+};
+mbox.prototype.isActivated = function() {
+    return this.Lb
+};
+mbox.prototype.setOffer = function(A) {
+    if (A && A.show && A.setOnLoad) {
+        this.Nb = A
+    } else {
+        throw "Invalid offer"
+    }
+    return this
+};
+mbox.prototype.getOffer = function() {
+    return this.Nb
+};
+mbox.prototype.show = function() {
+    this.setEventTime("show.start");
+    var A = this.Nb.show(this);
+    this.setEventTime(A == 1 ? "show.end.ok" : "show.end");
+    return A
+};
+mbox.prototype.showContent = function(A) {
+    if (A == null) {
+        return 0
+    }
+    if (this.Fb == null || !this.Fb.parentNode) {
+        this.Fb = this.getDefaultDiv();
+        if (this.Fb == null) {
+            return 0
+        }
+    }
+    if (this.Fb != A) {
+        this.Xb(this.Fb);
+        this.Fb.parentNode.replaceChild(A, this.Fb);
+        this.Fb = A
+    }
+    this.Yb(A);
+    this.Sb();
+    return 1
+};
+mbox.prototype.hide = function() {
+    this.setEventTime("hide.start");
+    var A = this.showContent(this.getDefaultDiv());
+    this.setEventTime(A == 1 ? "hide.end.ok" : "hide.end.fail");
+    return A
+};
+mbox.prototype.finalize = function() {
+    this.setEventTime("finalize.start");
+    this.cancelTimeout();
+    if (this.getDefaultDiv() == null) {
+        if (this.mb.force() != null) {
+            this.setMessage("No default content, an empty one has been added")
+        } else {
+            this.setMessage("Unable to locate mbox")
+        }
+    }
+    if (!this.activate()) {
+        this.hide();
+        this.setEventTime("finalize.end.hide")
+    }
+    this.setEventTime("finalize.end.ok")
+};
+mbox.prototype.cancelTimeout = function() {
+    if (this.Vb) {
+        clearTimeout(this.Vb)
+    }
+    if (this.Mb != null) {
+        this.Mb.cancel()
+    }
+};
+mbox.prototype.getDiv = function() {
+    return this.Fb
+};
+mbox.prototype.getDefaultDiv = function() {
+    if (this.Tb == null) {
+        this.Tb = this.mb.locate()
+    }
+    return this.Tb
+};
+mbox.prototype.setEventTime = function(A) {
+    this.Ob[A] = (new Date()).getTime()
+};
+mbox.prototype.getEventTimes = function() {
+    return this.Ob
+};
+mbox.prototype.getImportName = function() {
+    return this.nb
+};
+mbox.prototype.getURL = function() {
+    return this.w.buildUrl()
+};
+mbox.prototype.getUrlBuilder = function() {
+    return this.w
+};
+mbox.prototype._b = function(A) {
+    return A.style.display != "none"
+};
+mbox.prototype.Yb = function(A) {
+    this.ac(A, true)
+};
+mbox.prototype.Xb = function(A) {
+    this.ac(A, false)
+};
+mbox.prototype.ac = function(B, A) {
+    B.style.visibility = A ? "visible" : "hidden";
+    B.style.display = A ? "block" : "none"
+};
+mboxOfferContent = function() {
+    this.Sb = function() {}
+};
+mboxOfferContent.prototype.show = function(A) {
+    var C = A.showContent(document.getElementById(A.getImportName()));
+    if (C == 1) {
+        this.Sb()
+    }
+    return C
+};
+mboxOfferContent.prototype.setOnLoad = function(A) {
+    this.Sb = A
+};
+mboxOfferAjax = function(A) {
+    this.Wb = A;
+    this.Sb = function() {}
+};
+mboxOfferAjax.prototype.setOnLoad = function(A) {
+    this.Sb = A
+};
+mboxOfferAjax.prototype.show = function(A) {
+    var D = document.createElement("div");
+    D.id = A.getImportName();
+    D.innerHTML = this.Wb;
+    var C = A.showContent(D);
+    if (C == 1) {
+        this.Sb()
+    }
+    return C
+};
+mboxOfferDefault = function() {
+    this.Sb = function() {}
+};
+mboxOfferDefault.prototype.setOnLoad = function(A) {
+    this.Sb = A
+};
+mboxOfferDefault.prototype.show = function(A) {
+    var C = A.hide();
+    if (C == 1) {
+        this.Sb()
+    }
+    return C
+};
+mboxCookieManager = function mboxCookieManager(B, A) {
+    this.g = B;
+    this.dc = A == "" || A.indexOf(".") == -1 ? "" : "; domain=" + A;
+    this.ec = new mboxMap();
+    this.loadCookies()
+};
+mboxCookieManager.prototype.isEnabled = function() {
+    this.setCookie("check", "true", 60);
+    this.loadCookies();
+    return this.getCookie("check") == "true"
+};
+mboxCookieManager.prototype.setCookie = function(C, B, D) {
+    if (typeof C != "undefined" && typeof B != "undefined" && typeof D != "undefined") {
+        var A = new Object();
+        A.name = C;
+        A.value = escape(B);
+        A.expireOn = Math.ceil(D + new Date().getTime() / 1000);
+        this.ec.put(C, A);
+        this.saveCookies()
+    }
+};
+mboxCookieManager.prototype.getCookie = function(B) {
+    var A = this.ec.get(B);
+    return A ? unescape(A.value) : null
+};
+mboxCookieManager.prototype.deleteCookie = function(A) {
+    this.ec.remove(A);
+    this.saveCookies()
+};
+mboxCookieManager.prototype.getCookieNames = function(A) {
+    var B = new Array();
+    this.ec.each(function(D, C) {
+        if (D.indexOf(A) == 0) {
+            B[B.length] = D
+        }
+    });
+    return B
+};
+mboxCookieManager.prototype.saveCookies = function() {
+    var A = new Array();
+    var B = 0;
+    this.ec.each(function(E, D) {
+        A[A.length] = E + "#" + D.value + "#" + D.expireOn;
+        if (B < D.expireOn) {
+            B = D.expireOn
+        }
+    });
+    var C = new Date(B * 1000);
+    document.cookie = this.g + "=" + A.join("|") + "; expires=" + C.toGMTString() + "; path=/" + this.dc
+};
+mboxCookieManager.prototype.loadCookies = function() {
+    this.ec = new mboxMap();
+    var E = document.cookie.indexOf(this.g + "=");
+    if (E != -1) {
+        var F = document.cookie.indexOf(";", E);
+        if (F == -1) {
+            F = document.cookie.indexOf(",", E);
+            if (F == -1) {
+                F = document.cookie.length
+            }
+        }
+        var G = document.cookie.substring(E + this.g.length + 1, F).split("|");
+        var A = Math.ceil(new Date().getTime() / 1000);
+        for (var C = 0; C < G.length; C++) {
+            var D = G[C].split("#");
+            if (A <= D[2]) {
+                var B = new Object();
+                B.name = D[0];
+                B.value = D[1];
+                B.expireOn = D[2];
+                this.ec.put(B.name, B)
+            }
+        }
+    }
+};
+mboxSession = function(B, C, E, D, A) {
+    this.rc = C;
+    this.Ab = E;
+    this.sc = D;
+    this.J = A;
+    this.tc = false;
+    this.Ib = typeof mboxForceSessionId != "undefined" ? mboxForceSessionId : mboxGetPageParameter(this.rc);
+    if (this.Ib == null || this.Ib.length == 0) {
+        this.Ib = A.getCookie(E);
+        if (this.Ib == null || this.Ib.length == 0) {
+            this.Ib = B;
+            this.tc = true
+        }
+    }
+    A.setCookie(E, this.Ib, D)
+};
+mboxSession.prototype.getId = function() {
+    return this.Ib
+};
+mboxSession.prototype.forceId = function(A) {
+    this.Ib = A;
+    this.J.setCookie(this.Ab, this.Ib, this.sc)
+};
+mboxPC = function(C, B, A) {
+    this.Ab = C;
+    this.sc = B;
+    this.J = A;
+    this.Ib = typeof mboxForcePCId != "undefined" ? mboxForcePCId : A.getCookie(C);
+    if (this.Ib != null) {
+        A.setCookie(C, this.Ib, B)
+    }
+};
+mboxPC.prototype.getId = function() {
+    return this.Ib
+};
+mboxPC.prototype.forceId = function(A) {
+    if (this.Ib != A) {
+        this.Ib = A;
+        this.J.setCookie(this.Ab, this.Ib, this.sc);
+        return true
+    }
+    return false
+};
+mboxGetPageParameter = function(D) {
+    var E = null;
+    var A = new RegExp(D + "=([^&]*)");
+    var C = A.exec(document.location);
+    if (C != null && C.length >= 2) {
+        E = C[1]
+    }
+    return E
+};
+mboxSetCookie = function(B, A, C) {
+    return mboxFactoryDefault.getCookieManager().setCookie(B, A, C)
+};
+mboxGetCookie = function(A) {
+    return mboxFactoryDefault.getCookieManager().getCookie(A)
+};
+mboxCookiePageDomain = function() {
+    var A = (/([^:]*)(:[0-9]{0,5})?/).exec(document.location.host)[1];
+    var B = /[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/;
+    if (!B.exec(A)) {
+        var C = (/([^\.]+\.[^\.]{3}|[^\.]+\.[^\.]+\.[^\.]{2})$/).exec(A);
+        if (C) {
+            A = C[0]
+        }
+    }
+    return A ? A : ""
+};
+mboxShiftArray = function(A) {
+    var D = new Array();
+    for (var C = 1; C < A.length; C++) {
+        D[D.length] = A[C]
+    }
+    return D
+};
+mboxGenerateId = function() {
+    return (new Date()).getTime() + "-" + Math.floor(Math.random() * 999999)
+};
+mboxScreenHeight = function() {
+    return screen.height
+};
+mboxScreenWidth = function() {
+    return screen.width
+};
+mboxBrowserWidth = function() {
+    return (window.innerWidth) ? window.innerWidth : document.documentElement ? document.documentElement.clientWidth : document.body.clientWidth
+};
+mboxBrowserHeight = function() {
+    return (window.innerHeight) ? window.innerHeight : document.documentElement ? document.documentElement.clientHeight : document.body.clientHeight
+};
+mboxBrowserTimeOffset = function() {
+    return -new Date().getTimezoneOffset()
+};
+mboxScreenColorDepth = function() {
+    return screen.pixelDepth
+};
+if (typeof mboxVersion == "undefined") {
+    var mboxVersion = 40;
+    var mboxFactories = new mboxMap();
+    var mboxFactoryDefault = new mboxFactory("barclaysbankplc.tt.omtrdc.net", "barclaysbankplc", "default")
+}
+if (mboxGetPageParameter("mboxDebug") != null || mboxFactoryDefault.getCookieManager().getCookie("debug") != null) {
+    setTimeout(function() {
+        if (typeof mboxDebugLoaded == "undefined") {
+            alert("Could not load the remote debug.\nPlease check your connection to Test&amp;Target servers")
+        }
+    }, 60 * 60);
+    document.write('<script type="text/javascript" src="http://admin7.testandtarget.omniture.com/admin/mbox/mbox_debug.jsp?mboxServerHost=barclaysbankplc.tt.omtrdc.net&clientCode=barclaysbankplc"><\/script>')
+}
+var mboxTrack = function(F, E) {
+        var A, B, C, D = mboxFactoryDefault;
+        if (D.getMboxes().length() > 0) {
+            A = D.getMboxes().getById(0);
+            B = A.getURL().replace("mbox=" + A.getName(), "mbox=" + F).replace("mboxPage=" + D.getPageId(), "mboxPage=" + mboxGenerateId()) + "&" + E, C = new Image();
+            C.style.display = "none";
+            C.src = B;
+            document.body.appendChild(C)
+        } else {
+            D.getSignaler().signal("onEvent", F + "&" + E)
+        }
+    },
+    mboxTrackLink = function(C, B, A) {
+        mboxTrack(C, B);
+        setTimeout("location='" + A + "'", 500)
+    };
+
+function tt_Log(A) {
+    mboxTrack("barc_onClick", "Destination=" + A)
+}
+
+function tt_Redirect(A) {
+    mboxTrack("barc_onClick", "Destination=" + A);
+    setTimeout("location='" + A + "'", 500)
+}
+var pageAlias = "",
+    extraInfo = "";
+if (window.tc_page_alias) {
+    pageAlias = "pageAlias=" + tc_page_alias
+}
+if (window.tc_extra_info) {
+    extraInfo = tc_extra_info.split("&")
+}
+var head = document.getElementsByTagName("head")[0];
+var script = document.createElement("script");
+script.type = "text/javascript";
+script.text = 'mboxCreate("Global_Mbox","' + pageAlias + '"';
+for (var i = 0; i < extraInfo.length; i++) {
+    script.text += ',"' + extraInfo[i] + '"'
+}
+script.text += ")";
+head.appendChild(script);
