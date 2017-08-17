@@ -147,7 +147,7 @@
 
             if (typeof(Storage) != undefined) {
                 if (localStorage.getItem('kxbarclays_bank_segs')) {
-                    console.log(kxbarclays_bank_segs.length);
+                    console.log(localStorage.getItem('kxbarclays_bank_segs'));
                     for (var i = 0, j = kruxTntUrlAr.length; i < j; i++) {
                         console.log('kruxSegment=' + kruxTntUrlAr[i]);
                         mboxCreate('kruxSegment=' + kruxTntUrlAr[i]);
