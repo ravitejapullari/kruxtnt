@@ -143,10 +143,21 @@
             /*mboxCreate('kruxSegment=' + kruxTntUrlAr[0]);
             mboxCreate('kruxSegment=' + kruxTntUrlAr[1]);
             mboxCreate('kruxSegment=' + kruxTntUrlAr[2]);*/
-            for (var i = 0, j = kruxTntUrlAr.length; i < j; i++) {
+
+
+            if (typeof(Storage) != undefined) {
+                if (localStorage.getItem('kxbarclays_bank_segs')) {
+                    console.log(kxbarclays_bank_segs.length);
+                    for (var i = 0, j = kruxTntUrlAr.length; i < j; i++) {
+                        console.log('kruxSegment=' + kruxTntUrlAr[i]);
+                        mboxCreate('kruxSegment=' + kruxTntUrlAr[i]);
+                    }
+                }
+            }
+            /* for (var i = 0, j = kruxTntUrlAr.length; i < j; i++) {
                 console.log('kruxSegment=' + kruxTntUrlAr[i]);
                 mboxCreate('kruxSegment=' + kruxTntUrlAr[i]);
-            }
+            }*/
             // });
         </script>
     </body>
