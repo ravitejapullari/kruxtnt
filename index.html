@@ -141,17 +141,17 @@
         <!--https%3A%2F%2Fwww.barclays.co.uk%2FPersonalBanking%2FP1242557947640 "
             https%3A%2F%2Fravitejapullari.github.io%2Fkruxtnt%2F -->
         <script type="text/javascript">
-            $(document).ready(function() {
-                if (typeof(Storage) != undefined) {
-                    if (localStorage.getItem('kxbarclays_bank_segs')) {
-                        var _kruxSegs = localStorage.getItem('kxbarclays_bank_segs').split(',');
-                        for (var i = 0, j = kruxTntUrlAr.length; i < j; i++) {
-                            mboxCreate(kruxTntIds[i]);
-                            mboxCreate('kruxSegment=' + kruxTntUrlAr[i]);
-                        }
+            //$(document).ready(function() {
+            if (typeof(Storage) != undefined) {
+                if (localStorage.getItem('kxbarclays_bank_segs')) {
+                    var _kruxSegs = localStorage.getItem('kxbarclays_bank_segs').split(',');
+                    for (var i = 0, j = kruxTntUrlAr.length; i < j; i++) {
+                        mboxCreate(kruxTntIds[i]);
+                        mboxCreate('kruxSegment=' + kruxTntUrlAr[i]);
                     }
                 }
-            });
+            }
+            //});
         </script>
     </body>
 
